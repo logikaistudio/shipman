@@ -125,11 +125,23 @@ export interface AggregatedCost {
   breakdownBySystem?: Record<SystemType, number>;
 }
 
+export interface TaskReadiness {
+  taskId: string;
+  name: string;
+  description: string;
+  status: string;
+  systemType: SystemType;
+  defectCount: number;
+  defects: string[];
+  isReady: boolean;
+}
+
 export interface ReadinessReport {
   vesselId: string;
   timestamp: Date;
   score: number; // 0-100
   perSystem: Array<{ system: SystemType; score: number; criticalOpen: number }>;
+  perTask: TaskReadiness[];
   criticalOpenItems: LogEntry[];
   missionProfile?: string;
 }
