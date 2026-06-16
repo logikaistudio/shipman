@@ -144,6 +144,32 @@ class ApiClient {
     }
   }
 
+  /** Create vessel */
+  async createVessel(vesselData: { name: string; imo: string; mmsi: string; metadata?: any }) {
+    const newMock = {
+      id: `vessel-${Date.now()}`,
+      name: vesselData.name,
+      imo: vesselData.imo,
+      mmsi: vesselData.mmsi,
+      metadata: vesselData.metadata || {},
+      createdAt: new Date().toISOString()
+    };
+    
+    MOCK_VESSELS.push(newMock);
+
+    return this.tryFetch(
+      async () => {
+        const r = await axios.post(
+          `${API_BASE}/api/v1/vessels`,
+          vesselData,
+          { headers: this.getHeaders() }
+        );
+        return r.data;
+      },
+      newMock
+    );
+  }
+
   /** Get vessels */
   async getVessels() {
     return this.tryFetch(
