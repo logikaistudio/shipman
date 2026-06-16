@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "npm install --prefix frontend",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/v1/vessels/:vesselId/costs/drivers", "destination": "/api/v1/vessels/[vesselId]/costs/drivers" },
+    { "source": "/api/v1/vessels/:vesselId/costs", "destination": "/api/v1/vessels/[vesselId]/costs" },
+    { "source": "/api/v1/vessels/:vesselId/readiness", "destination": "/api/v1/vessels/[vesselId]/readiness" },
+    { "source": "/api/v1/vessels/:vesselId", "destination": "/api/v1/vessels/[vesselId]/index" },
+    { "source": "/api/v1/vessels", "destination": "/api/v1/vessels/index" },
+    { "source": "/api/v1/tasks/:taskId/complete", "destination": "/api/v1/tasks/[taskId]/complete" },
+    { "source": "/api/v1/tasks", "destination": "/api/v1/tasks/index" },
+    { "source": "/api/v1/logs", "destination": "/api/v1/logs/index" },
+    { "source": "/((?!api).*)", "destination": "/index.html" }
+  ]
+}
