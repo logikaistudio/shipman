@@ -29,6 +29,8 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [addForm, setAddForm] = useState({ name: '', imo: '', mmsi: '', homeport: '', budget: '' });
   const [addLoading, setAddLoading] = useState(false);
+  const [editingVessel, setEditingVessel] = useState<Vessel | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -105,6 +107,36 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
       console.error('Failed to add vessel:', err);
     } finally {
       setAddLoading(false);
+    }
+  };
+
+  const handleEditVesselSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingVessel?.name || !editingVessel?.imo || !editingVessel?.mmsi) return;
+    setEditLoading(true);
+    try {
+      await apiClient.updateVessel(editingVessel.id, {
+        name: editingVessel.name,
+        imo: editingVessel.imo,
+        mmsi: editingVessel.mmsi,
+        metadata: editingVessel.metadata
+      });
+      setEditingVessel(null);
+      await fetchFleetData();
+    } catch (err) {
+      console.error('Failed to update vessel:', err);
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  const handleDeleteVessel = async (vesselId: string) => {
+    if (!window.confirm('Yakin ingin menghapus armada ini?')) return;
+    try {
+      await apiClient.deleteVessel(vesselId);
+      await fetchFleetData();
+    } catch (err) {
+      console.error('Failed to delete vessel:', err);
     }
   };
 
@@ -317,6 +349,20 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                         {/* Action Buttons */}
                         <div className="flex gap-2">
                           <button
+                            onClick={() => setEditingVessel(vessel)}
+                            className="px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-xl font-bold text-xs transition border border-amber-200"
+                            title="Edit Armada"
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteVessel(vessel.id)}
+                            className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-xl font-bold text-xs transition border border-red-200"
+                            title="Hapus Armada"
+                          >
+                            🗑️ Hapus
+                          </button>
+                          <button
                             id={`btn-detail-${vessel.id}`}
                             onClick={() => handleSelectVessel(vessel.id)}
                             className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition border border-slate-200"
@@ -460,6 +506,101 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                   className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold text-sm rounded-xl transition shadow-sm"
                 >
                   {addLoading ? '⏳ Menyimpan...' : '✓ Daftarkan Kapal'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* ============ EDIT ARMADA MODAL ============ */}
+      {editingVessel && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-slate-200">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100">
+              <div>
+                <h2 className="text-lg font-black text-slate-900">✏️ Edit Armada</h2>
+                <p className="text-slate-500 text-xs mt-0.5">Perbarui informasi kapal</p>
+              </div>
+              <button
+                onClick={() => setEditingVessel(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold transition"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleEditVesselSubmit} className="px-6 py-5 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Nama Kapal *</label>
+                <input
+                  type="text"
+                  required
+                  value={editingVessel.name}
+                  onChange={e => setEditingVessel(p => p ? { ...p, name: e.target.value } : null)}
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Nomor IMO *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingVessel.imo}
+                    onChange={e => setEditingVessel(p => p ? { ...p, imo: e.target.value } : null)}
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">MMSI *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingVessel.mmsi}
+                    onChange={e => setEditingVessel(p => p ? { ...p, mmsi: e.target.value } : null)}
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Homeport / Pangkalan</label>
+                <input
+                  type="text"
+                  value={editingVessel.metadata?.homeport || ''}
+                  onChange={e => setEditingVessel(p => p ? { ...p, metadata: { ...p.metadata, homeport: e.target.value } } : null)}
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Anggaran Pemeliharaan (Rp)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={editingVessel.metadata?.budget || ''}
+                  onChange={e => setEditingVessel(p => p ? { ...p, metadata: { ...p.metadata, budget: parseInt(e.target.value) || 0 } } : null)}
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingVessel(null)}
+                  className="flex-1 py-2.5 border border-slate-300 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 transition"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={editLoading}
+                  className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold text-sm rounded-xl transition shadow-sm"
+                >
+                  {editLoading ? '⏳ Menyimpan...' : '✓ Simpan Perubahan'}
                 </button>
               </div>
             </form>

@@ -194,6 +194,42 @@ class ApiClient {
     );
   }
 
+  /** Update vessel */
+  async updateVessel(vesselId: string, vesselData: { name: string; imo: string; mmsi: string; metadata?: any }) {
+    const index = MOCK_VESSELS.findIndex(v => v.id === vesselId);
+    if (index !== -1) {
+      MOCK_VESSELS[index] = { ...MOCK_VESSELS[index], ...vesselData };
+    }
+
+    return this.tryFetch(
+      async () => {
+        const r = await axios.put(
+          `${API_BASE}/api/v1/vessels/${vesselId}`,
+          vesselData,
+          { headers: this.getHeaders() }
+        );
+        return r.data;
+      },
+      MOCK_VESSELS[index]
+    );
+  }
+
+  /** Delete vessel */
+  async deleteVessel(vesselId: string) {
+    const index = MOCK_VESSELS.findIndex(v => v.id === vesselId);
+    if (index !== -1) {
+      MOCK_VESSELS.splice(index, 1);
+    }
+
+    return this.tryFetch(
+      async () => {
+        const r = await axios.delete(`${API_BASE}/api/v1/vessels/${vesselId}`, { headers: this.getHeaders() });
+        return r.data;
+      },
+      { success: true }
+    );
+  }
+
   /** Get readiness */
   async getReadiness(vesselId: string, missionProfile: string = 'patrol') {
     return this.tryFetch(
