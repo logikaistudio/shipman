@@ -43,7 +43,7 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
       setLoading(true);
       const data = await apiClient.getVessels();
 
-      const enriched = await Promise.all(data.map(async (v: any) => {
+      const enriched = await Promise.all(data.map(async (v: any, index: number) => {
         try {
           const [costsRes, readinessRes, tasksRes] = await Promise.all([
             apiClient.getCosts(v.id, '2026-06'),
@@ -57,7 +57,13 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
             spent = budget * 0.65; // Demo mock enforcement for individual vessels
           }
           
-          const readinessScore = readinessRes.score || 0;
+          let readinessScore = readinessRes.score || 0;
+          // Demo Mock: Force 7 vessels to be 4 Siap, 2 Rusak Ringan, 1 Rusak Berat
+          const demoScores = [95, 85, 90, 82, 75, 70, 45];
+          if (vessels.length === 7 && index < 7) {
+            readinessScore = demoScores[index];
+          }
+
           const openTasks = tasksRes.filter((t: any) => t.status === 'open').length;
           const overdueTasks = tasksRes.filter((t: any) => {
             const due = new Date(t.dueDate);
@@ -67,11 +73,13 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
           return { ...v, budget, spent, readinessScore, openTasks, overdueTasks };
         } catch {
           const fallbackBudget = v.metadata?.budget || 250000000;
+          const demoScores = [95, 85, 90, 82, 75, 70, 45];
+          const mockScore = (vessels.length === 7 && index < 7) ? demoScores[index] : 0;
           return {
             ...v,
             budget: fallbackBudget,
             spent: fallbackBudget * 0.65, 
-            readinessScore: 0, openTasks: 0, overdueTasks: 0
+            readinessScore: mockScore, openTasks: 0, overdueTasks: 0
           };
         }
       }));
@@ -229,8 +237,8 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
               <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col items-center justify-center relative shadow-inner">
                 <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest absolute top-4 left-5">Rerata Kesiapan</span>
                 <div className="mt-6 flex flex-col items-center">
-                  <div className="relative w-32 h-16 overflow-hidden flex justify-center">
-                    <svg viewBox="0 0 100 50" className="w-32 h-32 absolute top-0">
+                  <div className="relative w-32 h-16 overflow-hidden flex justify-center pb-2">
+                    <svg viewBox="0 0 100 55" className="w-32 h-auto absolute top-0">
                       <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#e2e8f0" strokeWidth="10" strokeLinecap="round" />
                       <path 
                         d="M 10 50 A 40 40 0 0 1 90 50" 
@@ -283,7 +291,7 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
               </div>
 
               {/* Budget Donut Chart Card */}
-              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-row items-center gap-6 shadow-inner">
+              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-row items-center gap-4 shadow-inner">
                 <div className="flex-1 space-y-1 relative">
                   <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest absolute -top-1">O&M Anggaran</span>
                   <div className="pt-5">
@@ -295,7 +303,7 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                   </div>
                 </div>
                 
-                <div className="relative w-24 h-24 flex items-center justify-center shrink-0">
+                <div className="relative w-20 h-20 flex items-center justify-center shrink-0">
                   <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                     <path className="text-slate-200" strokeWidth="4" stroke="currentColor" fill="none"
                       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
