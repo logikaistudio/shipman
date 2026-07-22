@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import apiClient from '../utils/apiClient';
 
 interface VesselDetailModalProps {
   isOpen: boolean;
@@ -15,7 +16,8 @@ export const VesselDetailModal: React.FC<VesselDetailModalProps> = ({
   vesselName,
   onUpdateSuccess
 }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'measurement'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'measurement' | 'general'>('general');
+  const [vesselData, setVesselData] = useState<any>(null);
   const [readinessData, setReadinessData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -34,10 +36,23 @@ export const VesselDetailModal: React.FC<VesselDetailModalProps> = ({
 
   useEffect(() => {
     if (isOpen && vesselId) {
+      fetchVesselData();
       fetchVesselReadiness();
       setSuccessMessage(null);
     }
   }, [isOpen, vesselId]);
+
+  const fetchVesselData = async () => {
+    try {
+      setLoading(true);
+      const data = await apiClient.getVessel(vesselId);
+      setVesselData(data);
+    } catch (err) {
+      console.error('Failed to load vessel details:', err);
+    } finally {
+      setLoading(false); // fetchVesselReadiness will also set loading, so it's fine
+    }
+  };
 
   const fetchVesselReadiness = async () => {
     try {
@@ -170,6 +185,16 @@ export const VesselDetailModal: React.FC<VesselDetailModalProps> = ({
             📊 Status Kesiapan
           </button>
           <button
+            onClick={() => setActiveTab('general')}
+            className={`flex-1 py-3 text-center font-bold text-xs uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === 'general'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            📋 Spesifikasi Umum
+          </button>
+          <button
             onClick={() => setActiveTab('measurement')}
             className={`flex-1 py-3 text-center font-bold text-xs uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'measurement'
@@ -253,7 +278,46 @@ export const VesselDetailModal: React.FC<VesselDetailModalProps> = ({
                 )}
               </div>
             </div>
-          ) : (
+          ) : activeTab === 'general' && vesselData ? (
+            <div className="space-y-6 pb-6">
+              {/* 1. Identifikasi & Status */}
+              <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 border-b border-slate-200 pb-2 mb-3">Identifikasi & Status</h3>
+                <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs">
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Asal Nama</span><span className="font-bold text-slate-800">{vesselData.metadata?.asalNama || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Status Armada</span><span className="font-bold text-slate-800">{vesselData.metadata?.statusArmada || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Pembangun</span><span className="font-bold text-slate-800">{vesselData.metadata?.pembangun || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Biaya</span><span className="font-bold text-slate-800">{vesselData.metadata?.biaya || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Mulai Berlayar</span><span className="font-bold text-slate-800">{vesselData.metadata?.mulaiBerlayar || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Nomor Lambung / IMO / MMSI</span><span className="font-bold text-slate-800">{vesselData.metadata?.nomorLambung || '-'} / {vesselData.imo || '-'} / {vesselData.mmsi || '-'}</span></div>
+                </div>
+              </div>
+
+              {/* 2. Ciri-ciri Umum */}
+              <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 border-b border-slate-200 pb-2 mb-3">Ciri-ciri Umum</h3>
+                <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs">
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Kelas & Jenis</span><span className="font-bold text-slate-800">{vesselData.metadata?.kelasDanJenis || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Berat Benaman</span><span className="font-bold text-slate-800">{vesselData.metadata?.beratBenaman || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Dimensi (P x L x S)</span><span className="font-bold text-slate-800">{vesselData.metadata?.panjang || '-'} x {vesselData.metadata?.lebar || '-'} x {vesselData.metadata?.saratAir || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Awak Kapal</span><span className="font-bold text-slate-800">{vesselData.metadata?.awakKapal || '-'}</span></div>
+                  <div className="flex flex-col col-span-2"><span className="text-slate-500 font-semibold mb-0.5">Pendorong</span><span className="font-bold text-slate-800">{vesselData.metadata?.pendorong || '-'}</span></div>
+                  <div className="flex flex-col col-span-2"><span className="text-slate-500 font-semibold mb-0.5">Kecepatan & Jangkauan</span><span className="font-bold text-slate-800">{vesselData.metadata?.kecepatan || '-'} • {vesselData.metadata?.jangkauan || '-'}</span></div>
+                </div>
+              </div>
+
+              {/* 3. Sensor & Persenjataan */}
+              <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 border-b border-slate-200 pb-2 mb-3">Sensor, Persenjataan & Fasilitas</h3>
+                <div className="grid grid-cols-1 gap-y-3 text-xs">
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Sensor & Sistem Pemroses</span><span className="font-bold text-slate-800">{vesselData.metadata?.sensorDanSistem || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Persenjataan Utama</span><span className="font-bold text-slate-800">{vesselData.metadata?.senjata || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Peralatan Perang Elektronik & Pelindung</span><span className="font-bold text-slate-800">{vesselData.metadata?.peralatanPerangElektronik || '-'}, {vesselData.metadata?.pelindung || '-'}</span></div>
+                  <div className="flex flex-col"><span className="text-slate-500 font-semibold mb-0.5">Fasilitas Penerbangan</span><span className="font-bold text-slate-800">{vesselData.metadata?.fasilitasPenerbangan || '-'} • {vesselData.metadata?.pesawatDiangkut || '-'}</span></div>
+                </div>
+              </div>
+            </div>
+          ) : activeTab === 'measurement' ? (
             /* Tab: Form Pengukuran */
             <form onSubmit={handleFormSubmit} className="space-y-6">
               {successMessage && (
@@ -409,7 +473,7 @@ export const VesselDetailModal: React.FC<VesselDetailModalProps> = ({
                 </button>
               </div>
             </form>
-          )}
+          ) : null}
         </div>
 
       </div>
