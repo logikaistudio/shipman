@@ -194,56 +194,81 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
       ) : (
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-8">
 
-          {/* Dashboard Summary */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-            <div>
-              <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                <span>📊</span> Fleet Condition Summary
-              </h2>
-              <p className="text-slate-500 text-xs font-semibold">Kondisi armada militer aktif per Juni 2026</p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                <span className="text-slate-550 text-xs font-bold uppercase tracking-wider">Rerata Kesiapan</span>
-                <div className="flex items-baseline gap-1 mt-2">
-                  <span className={`text-2xl font-black ${avgReadiness >= 80 ? 'text-green-600' : avgReadiness >= 60 ? 'text-amber-600' : 'text-red-600'}`}>
-                    {avgReadiness}%
+          {/* Dashboard Summary - Premium Glassmorphism Look */}
+          <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-[2rem] p-6 md:p-8 shadow-2xl overflow-hidden border border-slate-700">
+            {/* Decorative background elements */}
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 rounded-full bg-purple-500/10 blur-3xl"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h2 className="text-2xl font-black text-white flex items-center gap-3 tracking-tight">
+                    <span className="text-3xl">📊</span> Fleet Command Center
+                  </h2>
+                  <p className="text-slate-400 text-sm font-medium mt-1">Status Operasional & Finansial Armada Aktif</p>
+                </div>
+                <div className="hidden md:block">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold backdrop-blur-md">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    LIVE SYNC
                   </span>
-                  <span className="text-slate-400 text-xxs font-semibold">Patrol Ready</span>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between col-span-1 md:col-span-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-550 text-xs font-bold uppercase tracking-wider">Anggaran Terpakai</span>
-                  <span className="text-slate-700 text-xs font-bold">
-                    Rp {totalSpent.toLocaleString('id-ID')} / Rp {totalBudget.toLocaleString('id-ID')}
-                  </span>
-                </div>
-                <div className="mt-2 space-y-1">
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full transition-all duration-500 ${budgetUsagePercent >= 90 ? 'bg-red-500' : budgetUsagePercent >= 75 ? 'bg-amber-500' : 'bg-blue-500'}`}
-                      style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xxs text-slate-500 font-semibold">
-                    <span>{budgetUsagePercent.toFixed(1)}% terpakai</span>
-                    <span>Sisa: Rp {(totalBudget - totalSpent).toLocaleString('id-ID')}</span>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                {/* Readiness Card */}
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 flex flex-col justify-between hover:bg-white/10 transition-colors">
+                  <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">Rerata Kesiapan</span>
+                  <div className="mt-4">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className={`text-4xl font-black ${avgReadiness >= 80 ? 'text-emerald-400' : avgReadiness >= 60 ? 'text-yellow-400' : 'text-rose-400'}`}>
+                        {avgReadiness}%
+                      </span>
+                    </div>
+                    <span className="text-slate-300 text-xs font-medium mt-1 block">Patrol Ready Status</span>
                   </div>
                 </div>
-              </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                <span className="text-slate-550 text-xs font-bold uppercase tracking-wider">Pemeliharaan Tertunda</span>
-                <div className="flex items-baseline gap-2 mt-2">
-                  <span className="text-2xl font-black text-slate-800">{totalOpenTasks}</span>
-                  {totalOverdueTasks > 0 && (
-                    <span className="text-xs font-bold text-red-700 flex items-center bg-red-50 py-0.5 px-2 rounded-full border border-red-200">
-                      🚨 {totalOverdueTasks}
+                {/* Budget Card */}
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 flex flex-col justify-between col-span-1 md:col-span-2 hover:bg-white/10 transition-colors">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">O&M Anggaran Terpakai</span>
+                    <span className="text-white text-sm font-black tracking-wider">
+                      {budgetUsagePercent.toFixed(1)}%
                     </span>
-                  )}
+                  </div>
+                  <div className="space-y-3">
+                    <div className="w-full bg-slate-800 rounded-full h-3 shadow-inner overflow-hidden border border-slate-700/50">
+                      <div
+                        className={`h-full rounded-full transition-all duration-1000 relative ${budgetUsagePercent >= 90 ? 'bg-gradient-to-r from-rose-600 to-rose-400' : budgetUsagePercent >= 75 ? 'bg-gradient-to-r from-orange-500 to-yellow-400' : 'bg-gradient-to-r from-blue-600 to-cyan-400'}`}
+                        style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
+                      >
+                        <div className="absolute inset-0 bg-white/20 animate-pulse rounded-full"></div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-xs text-slate-400 font-medium">
+                      <span>Terpakai: <span className="text-white font-bold">{(totalSpent / 1000000000000).toFixed(2)}T</span></span>
+                      <span>Total Anggaran: <span className="text-white font-bold">{(totalBudget / 1000000000000).toFixed(2)}T</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tasks Card */}
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 flex flex-col justify-between hover:bg-white/10 transition-colors">
+                  <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">Tugas Tertunda</span>
+                  <div className="mt-4 flex flex-col gap-2">
+                    <div className="flex items-end gap-2">
+                      <span className="text-4xl font-black text-white leading-none">{totalOpenTasks}</span>
+                      <span className="text-slate-400 text-xs font-medium mb-1">Open</span>
+                    </div>
+                    {totalOverdueTasks > 0 && (
+                      <div className="inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-300 px-2.5 py-1 rounded-lg border border-rose-500/30 w-fit">
+                        <span className="text-xs">🚨</span>
+                        <span className="text-xs font-bold">{totalOverdueTasks} Overdue</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
