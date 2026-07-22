@@ -44,6 +44,96 @@ const MOCK_VESSELS = [
       pelindung: 'Sistem Decoy Terma SKWS', pesawatDiangkut: '1 x helikopter (tanpa hangar)', fasilitasPenerbangan: 'Heli deck'
     },
     createdAt: new Date().toISOString()
+  },
+  {
+    id: 'vessel-003',
+    name: 'KRI Ahmad Yani',
+    imo: '0000351',
+    mmsi: '525000351',
+    metadata: {
+      commissioned: 1986, homeport: 'Surabaya', budget: 1500000000000,
+      asalNama: 'Ahmad Yani', pembangun: 'KMS, Vlissingen', biaya: '-',
+      pasangLunas: '-', diluncurkan: '1965', mulaiBerlayar: '1986',
+      callsign: '-', nomorLambung: '351', statusArmada: 'Aktif bertugas',
+      kelasDanJenis: 'fregat kelas Ahmad Yani', tipe: 'Fregat', beratBenaman: '2.835 ton', panjang: '113,4 m', lebar: '12,5 m', saratAir: '5,8 m',
+      pendorong: '2x boiler, 2x turbin uap', kecepatan: 'Maks 28,5 knot',
+      jangkauan: '4.500 nmi', awakKapal: '254 personel',
+      sensorDanSistem: 'Signaal DA.05', peralatanPerangElektronik: '-',
+      senjata: 'OTO Melara 76 mm, C-802, Torpedo', pelindung: '-', pesawatDiangkut: '1 x helikopter', fasilitasPenerbangan: 'Heli deck dan Hangar'
+    },
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'vessel-004',
+    name: 'KRI Yos Sudarso',
+    imo: '0000353',
+    mmsi: '525000353',
+    metadata: {
+      commissioned: 1987, homeport: 'Surabaya', budget: 1500000000000,
+      asalNama: 'Yos Sudarso', pembangun: 'NDSM, Amsterdam', biaya: '-',
+      pasangLunas: '-', diluncurkan: '1966', mulaiBerlayar: '1987',
+      callsign: '-', nomorLambung: '353', statusArmada: 'Aktif bertugas',
+      kelasDanJenis: 'fregat kelas Ahmad Yani', tipe: 'Fregat', beratBenaman: '2.835 ton', panjang: '113,4 m', lebar: '12,5 m', saratAir: '5,8 m',
+      pendorong: '2x boiler, 2x turbin uap', kecepatan: 'Maks 28,5 knot',
+      jangkauan: '4.500 nmi', awakKapal: '254 personel',
+      sensorDanSistem: 'Signaal DA.05', peralatanPerangElektronik: '-',
+      senjata: 'OTO Melara 76 mm, C-802, Torpedo', pelindung: '-', pesawatDiangkut: '1 x helikopter', fasilitasPenerbangan: 'Heli deck dan Hangar'
+    },
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'vessel-005',
+    name: 'KRI Oswald Siahaan',
+    imo: '0000354',
+    mmsi: '525000354',
+    metadata: {
+      commissioned: 1988, homeport: 'Surabaya', budget: 1500000000000,
+      asalNama: 'Oswald Siahaan', pembangun: 'KMS, Vlissingen', biaya: '-',
+      pasangLunas: '-', diluncurkan: '1967', mulaiBerlayar: '1988',
+      callsign: '-', nomorLambung: '354', statusArmada: 'Aktif bertugas',
+      kelasDanJenis: 'fregat kelas Ahmad Yani', tipe: 'Fregat', beratBenaman: '2.835 ton', panjang: '113,4 m', lebar: '12,5 m', saratAir: '5,8 m',
+      pendorong: '2x boiler, 2x turbin uap', kecepatan: 'Maks 28,5 knot',
+      jangkauan: '4.500 nmi', awakKapal: '254 personel',
+      sensorDanSistem: 'Signaal DA.05', peralatanPerangElektronik: '-',
+      senjata: 'OTO Melara 76 mm, Yakhont, Torpedo', pelindung: '-', pesawatDiangkut: '1 x helikopter', fasilitasPenerbangan: 'Heli deck dan Hangar'
+    },
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'vessel-006',
+    name: 'KRI Abdul Halim Perdanakusuma',
+    imo: '0000355',
+    mmsi: '525000355',
+    metadata: {
+      commissioned: 1989, homeport: 'Surabaya', budget: 1500000000000,
+      asalNama: 'Abdul Halim Perdanakusuma', pembangun: 'NDSM, Amsterdam', biaya: '-',
+      pasangLunas: '-', diluncurkan: '1967', mulaiBerlayar: '1989',
+      callsign: '-', nomorLambung: '355', statusArmada: 'Aktif bertugas',
+      kelasDanJenis: 'fregat kelas Ahmad Yani', tipe: 'Fregat', beratBenaman: '2.835 ton', panjang: '113,4 m', lebar: '12,5 m', saratAir: '5,8 m',
+      pendorong: '2x boiler, 2x turbin uap', kecepatan: 'Maks 28,5 knot',
+      jangkauan: '4.500 nmi', awakKapal: '254 personel',
+      sensorDanSistem: 'Signaal DA.05', peralatanPerangElektronik: '-',
+      senjata: 'OTO Melara 76 mm, C-802, Torpedo', pelindung: '-', pesawatDiangkut: '1 x helikopter', fasilitasPenerbangan: 'Heli deck dan Hangar'
+    },
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'vessel-007',
+    name: 'KRI Karel Satsuitubun',
+    imo: '0000356',
+    mmsi: '525000356',
+    metadata: {
+      commissioned: 1989, homeport: 'Surabaya', budget: 1500000000000,
+      asalNama: 'Karel Satsuitubun', pembangun: 'NDSM, Amsterdam', biaya: '-',
+      pasangLunas: '-', diluncurkan: '1967', mulaiBerlayar: '1989',
+      callsign: '-', nomorLambung: '356', statusArmada: 'Aktif bertugas',
+      kelasDanJenis: 'fregat kelas Ahmad Yani', tipe: 'Fregat', beratBenaman: '2.835 ton', panjang: '113,4 m', lebar: '12,5 m', saratAir: '5,8 m',
+      pendorong: '2x boiler, 2x turbin uap', kecepatan: 'Maks 28,5 knot',
+      jangkauan: '4.500 nmi', awakKapal: '254 personel',
+      sensorDanSistem: 'Signaal DA.05', peralatanPerangElektronik: '-',
+      senjata: 'OTO Melara 76 mm, C-802, Torpedo', pelindung: '-', pesawatDiangkut: '1 x helikopter', fasilitasPenerbangan: 'Heli deck dan Hangar'
+    },
+    createdAt: new Date().toISOString()
   }
 ];
 

@@ -296,6 +296,14 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                                 </>
                               )}
                             </div>
+                            <div className="flex flex-wrap gap-x-2 gap-y-1 text-xxs text-slate-500 mt-1.5 font-medium">
+                              {vessel.metadata?.nomorLambung && <span>No. Lambung: {vessel.metadata.nomorLambung}</span>}
+                              {vessel.metadata?.statusArmada && <><span>•</span><span>Status: {vessel.metadata.statusArmada}</span></>}
+                              {vessel.metadata?.kelasDanJenis && <><span>•</span><span>Kelas: {vessel.metadata.kelasDanJenis}</span></>}
+                              {vessel.metadata?.tipe && <><span>•</span><span>Tipe: {vessel.metadata.tipe}</span></>}
+                              {vessel.metadata?.diluncurkan && <><span>•</span><span>Dibuat: {vessel.metadata.diluncurkan}</span></>}
+                              {vessel.metadata?.mulaiBerlayar && <><span>•</span><span>Mulai Berlayar: {vessel.metadata.mulaiBerlayar}</span></>}
+                            </div>
                           </div>
                           <span className={`text-xxs font-extrabold px-3 py-1 rounded-full border ${isVesselReady
                             ? 'bg-green-50 text-green-700 border-green-200'
