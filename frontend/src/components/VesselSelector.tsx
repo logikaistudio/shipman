@@ -273,8 +273,8 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                 return (
                   <div
                     key={vessel.id}
-                    className={`bg-white border rounded-2xl p-5 transition hover:shadow-md ${selectedVessel === vessel.id
-                      ? 'border-blue-500 ring-2 ring-blue-200 shadow-md'
+                    className={`bg-white border rounded-3xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${selectedVessel === vessel.id
+                      ? 'border-blue-500 ring-4 ring-blue-50 shadow-lg'
                       : 'border-slate-200 shadow-sm hover:border-slate-300'
                     }`}
                   >
@@ -320,29 +320,29 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                         </div>
 
                         {/* Metrics */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                          <div className="space-y-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-3 mt-2 border-t border-slate-100">
+                          <div className="space-y-1.5">
                             <div className="flex justify-between text-xs font-bold">
-                              <span className="text-slate-500">Skor Kesiapan:</span>
-                              <span className={vessel.readinessScore >= 80 ? 'text-green-600' : 'text-amber-600'}>
+                              <span className="text-slate-500 uppercase tracking-wider text-[10px]">Skor Kesiapan</span>
+                              <span className={vessel.readinessScore >= 80 ? 'text-green-600 font-black' : 'text-amber-600 font-black'}>
                                 {vessel.readinessScore}%
                               </span>
                             </div>
-                            <div className="w-full bg-slate-100 h-1.5 rounded-full">
+                            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden shadow-inner">
                               <div
-                                className={`h-1.5 rounded-full ${vessel.readinessScore >= 80 ? 'bg-green-500' : vessel.readinessScore >= 60 ? 'bg-amber-500' : 'bg-red-500'}`}
+                                className={`h-full rounded-full transition-all duration-1000 ${vessel.readinessScore >= 80 ? 'bg-gradient-to-r from-green-500 to-emerald-400' : vessel.readinessScore >= 60 ? 'bg-gradient-to-r from-amber-500 to-yellow-400' : 'bg-gradient-to-r from-red-500 to-rose-400'}`}
                                 style={{ width: `${vessel.readinessScore}%` }}
                               ></div>
                             </div>
                           </div>
-                          <div className="space-y-1">
+                          <div className="space-y-1.5">
                             <div className="flex justify-between text-xs font-bold">
-                              <span className="text-slate-500">Budget Terpakai:</span>
-                              <span className="text-slate-700">{vesselUsage.toFixed(1)}%</span>
+                              <span className="text-slate-500 uppercase tracking-wider text-[10px]">Budget Terpakai</span>
+                              <span className="text-slate-700 font-black">{vesselUsage.toFixed(1)}%</span>
                             </div>
-                            <div className="w-full bg-slate-100 h-1.5 rounded-full">
+                            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden shadow-inner">
                               <div
-                                className={`h-1.5 rounded-full ${vesselUsage >= 90 ? 'bg-red-500' : vesselUsage >= 75 ? 'bg-amber-500' : 'bg-blue-500'}`}
+                                className={`h-full rounded-full transition-all duration-1000 ${vesselUsage >= 90 ? 'bg-gradient-to-r from-red-500 to-rose-400' : vesselUsage >= 75 ? 'bg-gradient-to-r from-amber-500 to-orange-400' : 'bg-gradient-to-r from-blue-600 to-cyan-400'}`}
                                 style={{ width: `${Math.min(vesselUsage, 100)}%` }}
                               ></div>
                             </div>

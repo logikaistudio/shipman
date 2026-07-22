@@ -203,13 +203,19 @@ function buildMockReadiness(vesselId: string) {
 
 function buildMockCosts(vesselId: string, period: string) {
   const vessel = MOCK_VESSELS.find(v => v.id === vesselId);
+  const budget = vessel?.metadata?.budget || 250000000;
+  const spent = budget * 0.65;
+  const totalParts = spent * 0.40;
+  const totalLabor = spent * 0.20;
+  const totalMisc = spent * 0.40;
+  
   return {
     vesselId, period,
-    totalParts: 6500000,
-    totalLabor: 3000000,
-    totalMisc: 500000,
-    grandTotal: 10000000,
-    budget: vessel?.metadata?.budget || 250000000
+    totalParts,
+    totalLabor,
+    totalMisc,
+    grandTotal: spent,
+    budget
   };
 }
 

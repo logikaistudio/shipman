@@ -29,14 +29,24 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  // If no logs for period, use seed data totals
+  // If no logs for period, use seed data totals (set to ~65% usage)
   if (totalParts === 0 && totalLabor === 0) {
-    totalParts = 6500000;
-    totalLabor = 3000000;
+    const vesselBudget = vessel.metadata?.budget || 250000000;
+    const spent = vesselBudget * 0.65;
+    totalParts = spent * 0.40;
+    totalLabor = spent * 0.20;
+    const totalMisc = spent * 0.40;
+    
+    return res.json({
+      vesselId, period: periodStr,
+      totalParts, totalLabor, totalMisc,
+      grandTotal: spent,
+      budget: vesselBudget
+    });
   }
 
   const grandTotal = totalParts + totalLabor;
-  const budget = vessel.metadata?.budget || 10000;
+  const budget = vessel.metadata?.budget || 250000000;
 
   return res.json({
     vesselId, period: periodStr,
