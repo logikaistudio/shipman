@@ -281,36 +281,42 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({ onVesselSelected
                     <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                       {/* Vessel Info */}
                       <div className="flex-1 space-y-3">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <span className="text-3xl">{getVesselIcon(vessel.name)}</span>
-                          <div className="flex-1">
-                            <h4 className="text-lg font-extrabold text-slate-900">{vessel.name}</h4>
-                            <div className="flex gap-2 text-xxs text-slate-500 mt-0.5 font-medium">
-                              <span>IMO: {vessel.imo}</span>
-                              <span>•</span>
-                              <span>MMSI: {vessel.mmsi}</span>
-                              {vessel.metadata?.homeport && (
-                                <>
-                                  <span>•</span>
-                                  <span>Homeport: {vessel.metadata.homeport}</span>
-                                </>
-                              )}
+                        <div className="flex flex-col sm:flex-row items-start gap-4">
+                          <span className="text-4xl shrink-0 mt-1">{getVesselIcon(vessel.name)}</span>
+                          <div className="flex-1 w-full space-y-2.5">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <h4 className="text-lg font-extrabold text-slate-900 leading-tight">{vessel.name}</h4>
+                              <span className={`text-xxs font-extrabold px-3 py-1 rounded-full border ${isVesselReady
+                                ? 'bg-green-50 text-green-700 border-green-200'
+                                : 'bg-red-50 text-red-700 border-red-200'
+                              }`}>
+                                {isVesselReady ? '✅ SIAP OPERASI' : '🚨 MAINTENANCE'}
+                              </span>
                             </div>
-                            <div className="flex flex-wrap gap-x-2 gap-y-1 text-xxs text-slate-500 mt-1.5 font-medium">
-                              {vessel.metadata?.nomorLambung && <span>No. Lambung: {vessel.metadata.nomorLambung}</span>}
-                              {vessel.metadata?.statusArmada && <><span>•</span><span>Status: {vessel.metadata.statusArmada}</span></>}
-                              {vessel.metadata?.kelasDanJenis && <><span>•</span><span>Kelas: {vessel.metadata.kelasDanJenis}</span></>}
-                              {vessel.metadata?.tipe && <><span>•</span><span>Tipe: {vessel.metadata.tipe}</span></>}
-                              {vessel.metadata?.diluncurkan && <><span>•</span><span>Dibuat: {vessel.metadata.diluncurkan}</span></>}
-                              {vessel.metadata?.mulaiBerlayar && <><span>•</span><span>Mulai Berlayar: {vessel.metadata.mulaiBerlayar}</span></>}
+                            
+                            <div className="space-y-1.5">
+                              {/* Row 1: Identification */}
+                              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium">
+                                {vessel.metadata?.nomorLambung && <span><span className="text-slate-400">Lambung:</span> <span className="text-slate-700 font-bold">{vessel.metadata.nomorLambung}</span></span>}
+                                <span><span className="text-slate-400">IMO:</span> <span className="text-slate-700 font-bold">{vessel.imo}</span></span>
+                                <span><span className="text-slate-400">MMSI:</span> <span className="text-slate-700 font-bold">{vessel.mmsi}</span></span>
+                                {vessel.metadata?.homeport && <span><span className="text-slate-400">Homeport:</span> <span className="text-slate-700 font-bold">{vessel.metadata.homeport}</span></span>}
+                              </div>
+                              
+                              {/* Row 2: Type & Status */}
+                              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium">
+                                {vessel.metadata?.statusArmada && <span><span className="text-slate-400">Status:</span> <span className="text-blue-600 font-bold">{vessel.metadata.statusArmada}</span></span>}
+                                {vessel.metadata?.kelasDanJenis && <span><span className="text-slate-400">Kelas:</span> <span className="text-slate-700 font-bold">{vessel.metadata.kelasDanJenis}</span></span>}
+                                {vessel.metadata?.tipe && <span><span className="text-slate-400">Tipe:</span> <span className="text-slate-700 font-bold">{vessel.metadata.tipe}</span></span>}
+                              </div>
+                              
+                              {/* Row 3: Timelines */}
+                              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium">
+                                {vessel.metadata?.diluncurkan && <span><span className="text-slate-400">Dibuat:</span> <span className="text-slate-700 font-bold">{vessel.metadata.diluncurkan}</span></span>}
+                                {vessel.metadata?.mulaiBerlayar && <span><span className="text-slate-400">Mulai Berlayar:</span> <span className="text-slate-700 font-bold">{vessel.metadata.mulaiBerlayar}</span></span>}
+                              </div>
                             </div>
                           </div>
-                          <span className={`text-xxs font-extrabold px-3 py-1 rounded-full border ${isVesselReady
-                            ? 'bg-green-50 text-green-700 border-green-200'
-                            : 'bg-red-50 text-red-700 border-red-200'
-                          }`}>
-                            {isVesselReady ? '✅ SIAP OPERASI' : '🚨 MAINTENANCE'}
-                          </span>
                         </div>
 
                         {/* Metrics */}
